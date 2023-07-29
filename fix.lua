@@ -4,7 +4,8 @@ local whitelisted = {
     {name = "NovolineFreeGiveACC", tags = {3}},
     {name = "putyourcorkinmyas", tags = {3}},
     {name = "BedwarsFunnyAC", tags = {3}},
-	
+    {name = "NotXylexLOL", tags = {3}},
+    {name = "grimacefrommc_donald", tags = {2}},
 }
 	
 local chatTags = {
