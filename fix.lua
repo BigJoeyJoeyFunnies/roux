@@ -1,15 +1,17 @@
 local textChatService = game:GetService("TextChatService")
 
 local whitelisted = {
-    {name = "NovolineFreeGiveACC", tags = {1}},
+    {name = "NovolineFreeGiveACC", tags = {3}},
+    {name = "putyourcorkinmyas", tags = {3}},
+    {name = "BedwarsFunnyAC", tags = {3}},
+	
 }
 	
 local chatTags = {
-    [1] = {name = "STAR", color = Color3.fromRGB(255, 0, 0)},
-    [2] = {name = "Kai", color = Color3.fromRGB(113, 3, 255)},
-    [3] = {name = "VAPE PRIVATE", color = Color3.fromRGB(255, 76.5, 76.5)},
-    [4] = {name = "MONT", color = Color3.fromRGB(255, 76.5, 76.5)},
-    [5] = {name = "BOOSTER", color = Color3.fromRGB(244, 127, 255)},
+    [1] = {name = "LUCK OWNER", color = Color3.fromRGB(124,252,0)},
+    [2] = {name = "LUCK CO OWNER", color = Color3.fromRGB(124,252,0)},
+    [3] = {name = "LUCK DEVELOPER", color = Color3.fromRGB(124,252,0)},
+
 }
 
 local function getPlayerTags(playerName)
