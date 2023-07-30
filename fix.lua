@@ -1,7 +1,7 @@
 local textChatService = game:GetService("TextChatService")
 
 local whitelisted = {
-    {name = "zephyerisfunny", tags = {3}},
+    {name = "zephyerisfunny", tags = {4}},
     {name = "putyourcorkinmyas", tags = {3}},
     {name = "BedwarsFunnyAC", tags = {3}},
     {name = "NotXylexLOL", tags = {3}},
@@ -12,6 +12,7 @@ local chatTags = {
     [1] = {name = "LUCK OWNER", color = Color3.fromRGB(124,252,0)},
     [2] = {name = "LUCK CO OWNER", color = Color3.fromRGB(124,252,0)},
     [3] = {name = "LUCK DEVELOPER", color = Color3.fromRGB(124,252,0)},
+    [4] = {name = "LUCK HEAD DEVELOPER", color = Color3.fromRGB(124,252,0)},
 
 }
 
