@@ -3,7 +3,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
-local objs = game:GetObjects("rbxassetid://14281198716")
+local objs = game:GetObjects("rbxassetid://14282610939")
 local import = objs[1]
 import.Parent = game:GetService("ReplicatedStorage")
 index = {
@@ -30,20 +30,13 @@ index = {
     {
         name = "emerald_sword",
         offset = CFrame.Angles(math.rad(0),math.rad(-100),math.rad(-90)),
-        model = import:WaitForChild("Emerald_sword"),
+        model = import:WaitForChild("Diamond_Sword"),
     }, 
     {
         name = "rageblade",
         offset = CFrame.Angles(math.rad(0),math.rad(-100),math.rad(-90)),
-        model = import:WaitForChild("Rageblade"),
+        model = import:WaitForChild("Diamond_Sword"),
     }, 
-    {
-
-        name = "telepearl",
-	offset = CFrame.Angles(math.rad(0), math.rad(0), math.rad(-90)),
-        model = import:WaitForChild("pearl"),
-    }, 
-    
 
  }
 local func = Workspace:WaitForChild("Camera").Viewmodel.ChildAdded:Connect(function(tool)
@@ -80,4 +73,3 @@ local func = Workspace:WaitForChild("Camera").Viewmodel.ChildAdded:Connect(funct
         end
     end
 end)
-
