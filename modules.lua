@@ -4577,12 +4577,84 @@ end)
 
 
 
+runFunction(function()
+    local hasTeleported = false
+    local TweenService = game:GetService("TweenService")
+    local lplr = game.Players.LocalPlayer
+
+    function findNearestPlayer()
+        local nearestPlayer = nil
+        local minDistance = math.huge
+        
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= lplr and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Team ~= lplr.Team and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid.Health > 0 then
+                local distance = (player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                if distance < minDistance then
+                    nearestPlayer = player
+                    minDistance = distance
+                end
+            end
+        end
+        
+        return nearestPlayer
+    end
+
+    function isPlayerAlive(player)
+        return player.Character and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid.Health > 0
+    end
+
+    function tweenToNearestPlayer()
+        local nearestPlayer = findNearestPlayer()
+        
+        if nearestPlayer and not hasTeleported then
+            hasTeleported = true
+
+            local playerRootPart = nearestPlayer.Character.HumanoidRootPart
+            local blockPosition = Vector3.new(playerRootPart.Position.X, playerRootPart.Position.Y, playerRootPart.Position.Z)
+            
+            local playerName = nearestPlayer.Name -- Get the name of the player to be teleported to
+
+            warningNotification("Star", "Teleporting to " .. playerName, 0) -- Display the initial notification with the player's name
+
+            local teleportSuccess = false -- Variable to track teleport success
+
+            local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(3.0), {CFrame = CFrame.new(blockPosition)})
+            tween:Play()
+            tween.Completed:Connect(function()
+                -- Teleportation completed, set teleportSuccess to true
+                teleportSuccess = true
+            end)
+
+            wait(7) -- Wait for 7 seconds to check if the teleportation failed
+            if not teleportSuccess and isPlayerAlive(nearestPlayer) then
+                warningNotification("Star", "Teleport failed", 5) -- Display "Teleport failed" warning if the teleportation failed
+            end
+        end
+    end
+
+    BetterPlayerTP = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+        Name = "BetterPlayerTP",
+        Function = function(callback)
+            if callback then
+                lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+                lplr.CharacterAdded:Connect(function()
+                    wait(0.3) 
+                    tweenToNearestPlayer()
+                end)
+                hasTeleported = false
+                BetterPlayerTP["ToggleButton"](false)
+            end
+        end,
+        ["HoverText"] = "Tp To Closest Player, Thanks Snoopy for method"
+    })
+end)
+
 
 runFunction(function()
 	local Sky = {Enabled = false}
 	local Skymode = {Value = "Normal"}
 	Sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "Themes",
+		Name = "Custom Themes",
 		Function = function(callback)
 			if callback then
 	
