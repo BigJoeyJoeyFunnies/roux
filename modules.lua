@@ -4618,7 +4618,7 @@ runFunction(function()
 
             local teleportSuccess = false -- Variable to track teleport success
 
-            local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(3.0), {CFrame = CFrame.new(blockPosition)})
+local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(1.5), {CFrame = CFrame.new(blockPosition)})
             tween:Play()
             tween.Completed:Connect(function()
                 -- Teleportation completed, set teleportSuccess to true
