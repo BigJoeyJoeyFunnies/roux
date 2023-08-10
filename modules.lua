@@ -4618,7 +4618,7 @@ runFunction(function()
 
             local teleportSuccess = false -- Variable to track teleport success
 
-local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(1.5), {CFrame = CFrame.new(blockPosition)})
+local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.7), {CFrame = CFrame.new(blockPosition)})
             tween:Play()
             tween.Completed:Connect(function()
                 -- Teleportation completed, set teleportSuccess to true
@@ -4654,7 +4654,7 @@ runFunction(function()
 	local Sky = {Enabled = false}
 	local Skymode = {Value = "Normal"}
 	Sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "Custom Themes",
+		Name = "Themes (sky)",
 		Function = function(callback)
 			if callback then
 	
