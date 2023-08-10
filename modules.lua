@@ -4747,7 +4747,7 @@ runFunction(function()
 	local Sky = {Enabled = false}
 	local Skymode = {Value = "Normal"}
 	Sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "Themes (sky)",
+		Name = "Themes",
 		Function = function(callback)
 			if callback then
 	
