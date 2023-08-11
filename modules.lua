@@ -4750,17 +4750,17 @@ end)
 runFunction(function()
 	local sky = {Enabled = false}
 	sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "AnyaSky (for my co-owner)",
+		Name = "AnyaSky",
 		Function = function(callback)
 			if callback then
 
 
-game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14390387542"
-game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14390403728"
-game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14390393919"
-game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14390397678"
-game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14390390841"
-game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14390400166"
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14390854426"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14390896988"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14390861661"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14390864920"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14390857794"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14390867940"
 
 
 			end
