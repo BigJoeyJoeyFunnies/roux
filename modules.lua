@@ -4744,40 +4744,30 @@ end)
 
 
 runFunction(function()
-	local Sky = {Enabled = false}
-	local Skymode = {Value = "Normal"}
-	Sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "Themes",
+	local sky = {Enabled = false}
+	sky = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "AnyaSky (for my co-owner)",
 		Function = function(callback)
 			if callback then
-	
-						if Skymode.Value == "AnimeSky" then 
-
-                                                             wait(2)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/Anime.lua"))()
 
 
-						elseif Skymode.Value == "PurpulSky" then 
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14390387542"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14390403728"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14390393919"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14390397678"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14390390841"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14390400166"
 
-                                                             wait(2)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/PurplueSky.lua"))()
 
-
-
-
-
-				end
-		
 			end
-		end,
-		HoverText = "custom sky"
-	})
-	Skymode = Sky.CreateDropdown({
-		Name = "Mode",
-		List = {"PurpulSky", "AnimeSky"},
-		Function = function() end
+		end, 
+		HoverText = "Custom Sky Theme"
 	})
 end)
+
+
+
+
 
 
 
