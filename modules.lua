@@ -3641,8 +3641,8 @@ runFunction(function()
                          {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(50), math.rad(-90)), Time = 0.1}
                 },
                 ["PistonRemake"] = {
-                         {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-23), math.rad(50), math.rad(-90)), Time = 1000},
-                         {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(50), math.rad(-90)), Time = 1000}
+                         {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-25), math.rad(-25), math.rad(-25)), Time = 5},
+                         {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(-25), math.rad(-25)), Time = 5}
                 },
 
 		["Exhibition Old"] = {
