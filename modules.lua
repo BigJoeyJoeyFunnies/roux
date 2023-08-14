@@ -2481,7 +2481,7 @@ runFunction(function()
 	autoclickercps = autoclicker.CreateTwoSlider({
 		Name = "CPS",
 		Min = 1,
-		Max = 20,
+		Max = 1000000000,
 		Function = function(val) end,
 		Default = 8,
 		Default2 = 12
@@ -3610,6 +3610,14 @@ runFunction(function()
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.15},
 			{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.15}
 		},
+		SuperSlowSlow = {
+			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.50},
+			{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.50}
+		},
+		SlowerSuperSlowSlow = {
+			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 5},
+			{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time =  5}
+		},
 		New = {
 			{CFrame = CFrame.new(0.69, -0.77, 1.47) * CFrame.Angles(math.rad(-33), math.rad(57), math.rad(-81)), Time = 0.12},
 			{CFrame = CFrame.new(0.74, -0.92, 0.88) * CFrame.Angles(math.rad(147), math.rad(71), math.rad(53)), Time = 0.12}
@@ -3628,6 +3636,15 @@ runFunction(function()
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.1},
 			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.2}
 		},
+                ["PurpulV1"] = {
+                         {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-23), math.rad(50), math.rad(-90)), Time = 0.1},
+                         {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(50), math.rad(-90)), Time = 0.1}
+                },
+                ["PistonRemake"] = {
+                         {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-23), math.rad(50), math.rad(-90)), Time = 1000},
+                         {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(50), math.rad(-90)), Time = 1000}
+                },
+
 		["Exhibition Old"] = {
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.15},
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.05},
@@ -3776,7 +3793,7 @@ runFunction(function()
 								end
 								if originalRootC0 and killauracframe.Enabled then
 									if targetedPlayer ~= nil then
-										local targetPos = targetedPlayer.RootPart.Position + Vector3.new(0, 2, 0)
+										local targetPos = targetedPlayer.RootPart.Position + Vector3.new(0, 1, 0)
 										local direction = (Vector3.new(targetPos.X, targetPos.Y, targetPos.Z) - entityLibrary.character.Head.Position).Unit
 										local direction2 = (Vector3.new(targetPos.X, Root.Position.Y, targetPos.Z) - Root.Position).Unit
 										local lookCFrame = (CFrame.new(Vector3.zero, (Root.CFrame):VectorToObjectSpace(direction)))
@@ -3848,7 +3865,7 @@ runFunction(function()
 											end
 										end
 									end
-									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < 0.02 then 
+									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < 0.01 then 
 										break
 									end
 									local selfpos = selfrootpos + (killaurarange.Value > 14 and (selfrootpos - root.Position).magnitude > 14.4 and (CFrame.lookAt(selfrootpos, root.Position).lookVector * ((selfrootpos - root.Position).magnitude - 14)) or Vector3.zero)
@@ -4510,7 +4527,297 @@ runFunction(function()
 	})
 end)
 
+
+
+-- custom cape modules 
+
+
+
+
+runFunction(function()
+	local function capeFunction(char, texture)
+		for i,v in pairs(char:GetDescendants()) do
+			if v.Name == "Cape" then
+				v:Destroy()
+			end
+		end
+		local hum = char:WaitForChild("Humanoid")
+		local torso = nil
+		if hum.RigType == Enum.HumanoidRigType.R15 then
+			torso = char:WaitForChild("UpperTorso")
+		else
+			torso = char:WaitForChild("Torso")
+		end
+		local p = Instance.new("Part", torso.Parent)
+		p.Name = "Cape"
+		p.Anchored = false
+		p.CanCollide = false
+		p.TopSurface = 0
+		p.BottomSurface = 0
+		p.FormFactor = "Custom"
+		p.Size = Vector3.new(0.2,0.2,0.08)
+		p.Transparency = 1
+		local decal
+		local video = false
+		if texture:find(".webm") then 
+			video = true
+			local decal2 = Instance.new("SurfaceGui", p)
+			decal2.Adornee = p
+			decal2.CanvasSize = Vector2.new(1, 1)
+			decal2.Face = "Back"
+			decal = Instance.new("VideoFrame", decal2)
+			decal.Size = UDim2.new(0, 9, 0, 17)
+			decal.BackgroundTransparency = 1
+			decal.Position = UDim2.new(0, -4, 0, -8)
+			decal.Video = texture
+			decal.Looped = true
+			decal:Play()
+		else
+			decal = Instance.new("Decal", p)
+                        decal.Texture = "rbxassetid://14403224674"
+			decal.Face = "Back"
+		end
+		local msh = Instance.new("BlockMesh", p)
+		msh.Scale = Vector3.new(9, 17.5, 0.5)
+		local motor = Instance.new("Motor", p)
+		motor.Part0 = p
+		motor.Part1 = torso
+		motor.MaxVelocity = 0.01
+		motor.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
+		motor.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
+		local wave = false
+		repeat task.wait(1/44)
+			if video then 
+				decal.Visible = torso.LocalTransparencyModifier ~= 1
+			else
+				decal.Transparency = torso.Transparency
+			end
+			local ang = 0.1
+			local oldmag = torso.Velocity.magnitude
+			local mv = 0.002
+			if wave then
+				ang = ang + ((torso.Velocity.magnitude/10) * 0.05) + 0.05
+				wave = false
+			else
+				wave = true
+			end
+			ang = ang + math.min(torso.Velocity.magnitude/11, 0.5)
+			motor.MaxVelocity = math.min((torso.Velocity.magnitude/111), 0.04) --+ mv
+			motor.DesiredAngle = -ang
+			if motor.CurrentAngle < -0.2 and motor.DesiredAngle > -0.2 then
+				motor.MaxVelocity = 0.04
+			end
+			repeat task.wait() until motor.CurrentAngle == motor.DesiredAngle or math.abs(torso.Velocity.magnitude - oldmag) >= (torso.Velocity.magnitude/10) + 1
+			if torso.Velocity.magnitude < 0.1 then
+				task.wait(0.1)
+			end
+		until not p or p.Parent ~= torso.Parent
+	end
+
+	local Cape = {Enabled = false}
+	local CapeBox = {Value = ""}
+	Cape = GuiLibrary.ObjectsThatCanBeSaved.CustomCapesWindow.Api.CreateOptionsButton({
+		Name = "John Cena Cape",
+		Function = function(callback)
+			if callback then
+				local successfulcustom
+				if CapeBox.Value ~= "" then
+					if (tonumber(CapeBox.Value)) then
+						local suc, id = pcall(function() return string.match(game:GetObjects("rbxassetid://"..CapeBox.Value)[1].Texture, "%?id=(%d+)") end)
+						if not suc then
+							id = CapeBox.Value
+						end
+						successfulcustom = "rbxassetid://"..id
+					elseif (not isfile(CapeBox.Value)) then 
+						warningNotification("Cape", "Missing file", 5)
+					else
+						successfulcustom = CapeBox.Value:find(".") and getcustomasset(CapeBox.Value) or CapeBox.Value
+					end
+				end
+				table.insert(Cape.Connections, lplr.CharacterAdded:Connect(function(char)
+					task.spawn(function()
+						pcall(function() 
+							capeFunction(char, (successfulcustom or downloadVapeAsset("vape/assets/AnyaCape.png")))
+						end)
+					end)
+				end))
+				if lplr.Character then
+					task.spawn(function()
+						pcall(function() 
+							capeFunction(lplr.Character, (successfulcustom or downloadVapeAsset("vape/assets/AnyaCape.png")))
+						end)
+					end)
+				end
+			else
+				if lplr.Character then
+					for i,v in pairs(lplr.Character:GetDescendants()) do
+						if v.Name == "Cape" then
+							v:Destroy()
+						end
+					end
+				end
+			end
+		end
+	})
+	CapeBox = Cape.CreateTextBox({
+		Name = "File",
+		TempText = "File (link)",
+		FocusLost = function(enter) 
+			if enter then 
+				if Cape.Enabled then 
+					Cape.ToggleButton(false)
+					Cape.ToggleButton(false)
+				end
+			end
+		end
+	})
+end)
+
+
+
+
+runFunction(function()
+	local function capeFunction(char, texture)
+		for i,v in pairs(char:GetDescendants()) do
+			if v.Name == "Cape" then
+				v:Destroy()
+			end
+		end
+		local hum = char:WaitForChild("Humanoid")
+		local torso = nil
+		if hum.RigType == Enum.HumanoidRigType.R15 then
+			torso = char:WaitForChild("UpperTorso")
+		else
+			torso = char:WaitForChild("Torso")
+		end
+		local p = Instance.new("Part", torso.Parent)
+		p.Name = "Cape"
+		p.Anchored = false
+		p.CanCollide = false
+		p.TopSurface = 0
+		p.BottomSurface = 0
+		p.FormFactor = "Custom"
+		p.Size = Vector3.new(0.2,0.2,0.08)
+		p.Transparency = 1
+		local decal
+		local video = false
+		if texture:find(".webm") then 
+			video = true
+			local decal2 = Instance.new("SurfaceGui", p)
+			decal2.Adornee = p
+			decal2.CanvasSize = Vector2.new(1, 1)
+			decal2.Face = "Back"
+			decal = Instance.new("VideoFrame", decal2)
+			decal.Size = UDim2.new(0, 9, 0, 17)
+			decal.BackgroundTransparency = 1
+			decal.Position = UDim2.new(0, -4, 0, -8)
+			decal.Video = texture
+			decal.Looped = true
+			decal:Play()
+		else
+			decal = Instance.new("Decal", p)
+                        decal.Texture = "rbxassetid://13380453845"
+			decal.Face = "Back"
+		end
+		local msh = Instance.new("BlockMesh", p)
+		msh.Scale = Vector3.new(9, 17.5, 0.5)
+		local motor = Instance.new("Motor", p)
+		motor.Part0 = p
+		motor.Part1 = torso
+		motor.MaxVelocity = 0.01
+		motor.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
+		motor.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
+		local wave = false
+		repeat task.wait(1/44)
+			if video then 
+				decal.Visible = torso.LocalTransparencyModifier ~= 1
+			else
+				decal.Transparency = torso.Transparency
+			end
+			local ang = 0.1
+			local oldmag = torso.Velocity.magnitude
+			local mv = 0.002
+			if wave then
+				ang = ang + ((torso.Velocity.magnitude/10) * 0.05) + 0.05
+				wave = false
+			else
+				wave = true
+			end
+			ang = ang + math.min(torso.Velocity.magnitude/11, 0.5)
+			motor.MaxVelocity = math.min((torso.Velocity.magnitude/111), 0.04) --+ mv
+			motor.DesiredAngle = -ang
+			if motor.CurrentAngle < -0.2 and motor.DesiredAngle > -0.2 then
+				motor.MaxVelocity = 0.04
+			end
+			repeat task.wait() until motor.CurrentAngle == motor.DesiredAngle or math.abs(torso.Velocity.magnitude - oldmag) >= (torso.Velocity.magnitude/10) + 1
+			if torso.Velocity.magnitude < 0.1 then
+				task.wait(0.1)
+			end
+		until not p or p.Parent ~= torso.Parent
+	end
+
+	local Cape = {Enabled = false}
+	local CapeBox = {Value = ""}
+	Cape = GuiLibrary.ObjectsThatCanBeSaved.CustomCapesWindow.Api.CreateOptionsButton({
+		Name = "Vape Cape",
+		Function = function(callback)
+			if callback then
+				local successfulcustom
+				if CapeBox.Value ~= "" then
+					if (tonumber(CapeBox.Value)) then
+						local suc, id = pcall(function() return string.match(game:GetObjects("rbxassetid://"..CapeBox.Value)[1].Texture, "%?id=(%d+)") end)
+						if not suc then
+							id = CapeBox.Value
+						end
+						successfulcustom = "rbxassetid://"..id
+					elseif (not isfile(CapeBox.Value)) then 
+						warningNotification("Cape", "Missing file", 5)
+					else
+						successfulcustom = CapeBox.Value:find(".") and getcustomasset(CapeBox.Value) or CapeBox.Value
+					end
+				end
+				table.insert(Cape.Connections, lplr.CharacterAdded:Connect(function(char)
+					task.spawn(function()
+						pcall(function() 
+							capeFunction(char, (successfulcustom or downloadVapeAsset("vape/assets/AnyaCape.png")))
+						end)
+					end)
+				end))
+				if lplr.Character then
+					task.spawn(function()
+						pcall(function() 
+							capeFunction(lplr.Character, (successfulcustom or downloadVapeAsset("vape/assets/AnyaCape.png")))
+						end)
+					end)
+				end
+			else
+				if lplr.Character then
+					for i,v in pairs(lplr.Character:GetDescendants()) do
+						if v.Name == "Cape" then
+							v:Destroy()
+						end
+					end
+				end
+			end
+		end
+	})
+	CapeBox = Cape.CreateTextBox({
+		Name = "File",
+		TempText = "File (link)",
+		FocusLost = function(enter) 
+			if enter then 
+				if Cape.Enabled then 
+					Cape.ToggleButton(false)
+					Cape.ToggleButton(false)
+				end
+			end
+		end
+	})
+end)
+
 -- purpul modules
+
+
 
 
 
@@ -4550,8 +4857,18 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/RobloxBedwar
 loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/RobloxBedwarsTexturePack/main/NovolinePack.lua"))()
 
 
+                                               elseif Packmode.Value == "Purp" then 
 
-						elseif Packmode.Value == "32x" then 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/Purp"))()
+
+
+
+                                               elseif Packmode.Value == "PurpV2" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/v2.lua"))() 
+
+						
+                                              elseif Packmode.Value == "32x" then 
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/32x.lua"))()
 
@@ -4563,6 +4880,17 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/ro
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/164x.lua"))()
 
+                                               elseif Packmode.Value == "MC long" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/long.lua"))()
+
+                                               elseif Packmode.Value == "MC long (purp edit)" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/new/longpirp.lua"))()
+
+                                               elseif Packmode.Value == "AnotherPurpulPack" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/Ifelllikethispackexist/main/YEahPackt"))()
 
 				end
 		
@@ -4572,7 +4900,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/ro
 	})
 	Packmode = Packs.CreateDropdown({
 		Name = "Mode",
-		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "64x", "256x", "PP", "32x", "FirstPack"},
+		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "AnotherPurpulPack", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "32x", "FirstPack"},
 		Function = function() end
 	})
 end)
@@ -4772,10 +5100,6 @@ end)
 
 
 
-
-
-
-
 runFunction(function()
 	local Hotbat = {Enabled = false}
 	Hotbat = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
@@ -4798,6 +5122,53 @@ end)
 
 
 
+
+
+
+runFunction(function()
+	local Part = {Enabled = false}
+	Part = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "PartCreator (Useless)",
+		Function = function(callback)
+			if callback then
+
+	
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local partSize = Vector3.new(10, 1, 10)
+local yOffset = -5
+local lastPosition = character.HumanoidRootPart.Position
+
+local function createPart(position)
+    local newPart = Instance.new("Part")
+    newPart.Size = partSize
+    newPart.Position = position + Vector3.new(0, yOffset, 0)
+    newPart.Anchored = true
+    newPart.Parent = game.Workspace
+
+    wait(5)
+    newPart:Destroy()
+end
+
+character.HumanoidRootPart:GetPropertyChangedSignal("Position"):Connect(function()
+    local currentPosition = character.HumanoidRootPart.Position
+    if (currentPosition - lastPosition).Magnitude >= 1 then
+        lastPosition = currentPosition
+        createPart(currentPosition)
+    end
+end)
+
+
+                    Part.ToggleButton(false)
+
+
+
+			end
+		end, 
+		HoverText = "die to disable lmao"
+	})
+end)
 
 
 
@@ -10779,5 +11150,4 @@ task.spawn(function()
 		AutoLeave.ToggleButton(false)
 	end
 end)
-
 
