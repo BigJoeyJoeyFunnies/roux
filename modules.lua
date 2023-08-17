@@ -3614,12 +3614,8 @@ runFunction(function()
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.50},
 			{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.50}
 		},
-		SlowerSuperSlowSlow = {
-			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 5},
-			{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time =  5}
-		},
 		New = {
-			{CFrame = CFrame.new(0.69, -0.77, 1.47) * CFrame.Angles(math.rad(-33), math.rad(57), math.rad(-81)), Time = 0.12},
+			{CFrame = CFrame.new(0.69, -0.77, 1.47) * CFrame.Angles(math.rad(-33), math.rad(57), math.rad(-81)), Time =                  0.12},
 			{CFrame = CFrame.new(0.74, -0.92, 0.88) * CFrame.Angles(math.rad(147), math.rad(71), math.rad(53)), Time = 0.12}
 		},
 		Latest = {
@@ -3640,10 +3636,6 @@ runFunction(function()
                          {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-23), math.rad(50), math.rad(-90)), Time = 0.1},
                          {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(50), math.rad(-90)), Time = 0.1}
                 },
-                ["PistonRemake"] = {
-                         {CFrame = CFrame.new(0.33, -0.45, 0.3) * CFrame.Angles(math.rad(-25), math.rad(-25), math.rad(-25)), Time = 5},
-                         {CFrame = CFrame.new(0.33, -0.7, 0.6) * CFrame.Angles(math.rad(-25), math.rad(-25), math.rad(-25)), Time = 5}
-                },
 
 		["Exhibition Old"] = {
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.15},
@@ -3651,6 +3643,14 @@ runFunction(function()
 			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.1},
 			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.05},
 			{CFrame = CFrame.new(0.63, -0.1, 1.37) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.15}
+		},
+
+                 ["SmootherExhibition"] = {
+			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.6},
+			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.3},
+			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.7},
+			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.9},
+			{CFrame = CFrame.new(0.63, -0.1, 1.37) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 1}
 		}
 	}
 
@@ -4820,6 +4820,49 @@ end)
 
 
 
+runFunction(function()
+    disabler = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "ScytheDisabler",
+        Function = function(callback)
+            if callback then
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Players = game:GetService("Players")
+                local RunService = game:GetService("RunService")
+                local ScytheDash = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules")["@rbxts"].net.out._NetManaged.ScytheDash
+                
+                local function onRenderStepped()
+                    local localPlayer = Players.LocalPlayer
+                    if not localPlayer then
+                        return
+                    end
+                    local character = localPlayer.Character
+                    if not character then
+                        return
+                    end
+                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                    if humanoidRootPart then
+                        local lookVector = humanoidRootPart.CFrame.LookVector
+                        ScytheDash:FireServer({
+                            direction = lookVector
+                        })
+                    end
+                end
+                
+                local lastHeartbeat = tick()
+                local function onHeartbeat()
+                    local currentTime = tick()
+                    local elapsedSeconds = currentTime - lastHeartbeat
+                    if elapsedSeconds > 0 then
+                        lastHeartbeat = currentTime
+                    end
+                end
+                
+                RunService.RenderStepped:Connect(onRenderStepped)
+                RunService.Heartbeat:Connect(onHeartbeat)                                                                                 
+            end
+        end  
+    })
+end)
 
 runFunction(function()
 	local Packs = {Enabled = false}
@@ -4862,6 +4905,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/RobloxBedwar
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/Purp"))()
 
 
+                                               elseif Packmode.Value == "Gleem16x" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/hehee.lua"))()
+
+
+                                               elseif Packmode.Value == "Vanila+" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/new/rpubx.lua"))()
+
 
                                                elseif Packmode.Value == "PurpV2" then 
 
@@ -4900,7 +4952,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/If
 	})
 	Packmode = Packs.CreateDropdown({
 		Name = "Mode",
-		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "AnotherPurpulPack", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "32x", "FirstPack"},
+		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "Vanila+", "AnotherPurpulPack", "Gleem16x", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "32x", "FirstPack"},
 		Function = function() end
 	})
 end)
@@ -5070,6 +5122,50 @@ local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new
         end,
         ["HoverText"] = "Tp To Closest Player, Thanks Snoopy for method"
     })
+end)
+
+
+runFunction(function()
+	local Shaders = {Enabled = false}
+	local ShadersMode = {Value = "Normal"}
+	Shaders = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "Shaders",
+		Function = function(callback)
+			if callback then
+	
+						if ShadersMode.Value == "NormalShaders" then 
+
+							loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/segggy/main/shaders.lua", true))()
+
+						elseif ShadersMode.Value == "Vibe" then 
+
+					                loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/segggy/main/seg.lua", true))()
+
+                                               elseif ShadersMode.Value == "Realistic1" then 
+
+					                loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/Fr", true))()
+
+                                               elseif ShadersMode.Value == "Realistic2" then 
+
+					                loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/eee.lua", true))()
+
+						elseif ShadersMode.Value == "MotionBlur" then 
+
+					                loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/segggy/main/legend.lua", true))()
+
+
+
+				end
+		
+			end
+		end,
+		HoverText = "makes game look better"
+	})
+	ShadersMode = Shaders.CreateDropdown({
+		Name = "Mode",
+		List = {"Normal","MotionBlur", "Realistic1", "Realistic2", "Vibe"},
+		Function = function() end
+	})
 end)
 
 
@@ -11150,4 +11246,3 @@ task.spawn(function()
 		AutoLeave.ToggleButton(false)
 	end
 end)
-
