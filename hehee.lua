@@ -28,12 +28,12 @@ index = {
     },
     {
         name = "emerald_sword",
-        offset = CFrame.Angles(math.rad(0),math.rad(-100),math.rad(90)),
+        offset = CFrame.Angles(math.rad(0),math.rad(-100),math.rad(-90)),
         model = import:WaitForChild("funny"),
     }, 
     {
         name = "Rageblade",
-        offset = CFrame.Angles(math.rad(0),math.rad(-0),math.rad(-90)),
+        offset = CFrame.Angles(math.rad(0),math.rad(-0),math.rad(90)),
         model = import:WaitForChild("funny"),
     }, 
 
