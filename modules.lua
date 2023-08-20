@@ -398,8 +398,8 @@ local function getSpeed()
 		if bedwarsStore.grapple > tick() then
 			speed = speed + 90
 		end
-		if bedwarsStore.scythe > tick() then 
-			speed = speed + 5
+	        if bedwarsStore.scythe > tick() then 
+			speed = speed + 25
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then 
 			speed = speed + 20
@@ -2514,6 +2514,8 @@ runFunction(function()
 		HoverText = "Remove the CPS cap"
 	})
 end)
+
+
 
 runFunction(function()
 	local ReachValue = {Value = 14}
@@ -5239,48 +5241,179 @@ end)
 
 
 
+local GuiLibrary = shared.GuiLibrary
+local plrs = game.Players:GetPlayers()
+local hps_detected = {}
+local detected = {}
+local lplr = game.Players.LocalPlayer
+local setcallback = {}
+local hpsset = {}
+local InfFlyD = {["Enabled"] = false,}
+function char(v)
+	repeat task.wait() until v.Character
+	v.Character:WaitForChild("Humanoid").Changed:Connect(function ()
+		if v.Character:WaitForChild("Humanoid").Health ~= 100 then
+			if not hpsset[v.Name] then
+				hpsset[v.Name] = v.Character.Humanoid.Health
+			end
+			if hps_detected[v.Name] then
+				if not setcallback[v.Name] then setcallback[v.Name] = {} end
+				if hpsset[v.Name] >= v.Character.Humanoid.Health then
+					setcallback[v.Name][#setcallback[v.Name] + 1] = true;
+					hpsset[v.Name] = v.Character.Humanoid.Health
+				end
+				return
+			end
+			hps_detected[v.Name] = true;
+			task.wait(0.25)
+			local number = # (setcallback[v.Name] or {})
+			repeat task.wait()
+				for i,z in pairs(setcallback[v.Name] or {}) do
+					task.wait(0.25)
+					table.remove(setcallback[v.Name],i)
+				end
+			until # (setcallback[v.Name] or {}) == 0
+			task.wait(0.1)
+			hps_detected[v.Name] = false;
+		end
+	end)
+	local old
+	local my;
+	my = v.Character.Humanoid.Died:Connect(function()
+		repeat task.wait()
+			old = nil
+			task.wait()
+		until old == nil
+		my:Disconnect()
+	end)
+	local check;--,check2
+	local telepearlon = false
+	-- check = v.Character.DescendantAdded:Connect(function(telepearl)
+	--     if telepearl.Name == "telepearl" then
+	--         telepearlon = true;
+	--     end
+	-- end)
+	-- check2 = v.Character.DescendantRemoving:Connect(function(telepearl)
+	--     if telepearl.Name == "telepearl" then
+	--         telepearlon = false;
+	--     end
+	-- end)
+	v:GetAttributeChangedSignal("LastTeleported"):Connect(function()
+		if (workspace:GetServerTimeNow() - lplr:GetAttribute("LastTeleported")) < 3 then
+			telepearlon = true
+			task.wait(2)
+			telepearlon = false;
+		end
+	end)
+	while task.wait(0.1) do
+		repeat task.wait() until v.Character
+		-- local root = v.Character:WaitForChild("HumanoidRootPart")
+		-- local total = (root.Velocity.X < 0 and -root.Velocity.X or root.Velocity.X) + (root.Velocity.Z < 0 and -root.Velocity.Z or root.Velocity.Z)
+		-- local a = (root.Position.Y < 0 and -root.Position.Y or root.Position.Y) * (root.Parent.Humanoid.MoveDirection.Y == 0 and 1 or root.Parent.Humanoid.MoveDirection.Y + 1)
+		-- if (total > (a + ((total * .5)) or root:FindFirstChild("BodyVelocity"))
+		-- 	and (detected[v.Name] == false or detected[v.Name] == nil) and (not hps_detected[v.Name])-- and v ~= lplr
+		-- 	and root.Position.Y <= 300) then
+		-- 	detected[v.Name] = true;
+		-- 	warningNotification("Purpul Private","Vape User Detected : (Fly/Speed) "..v.Name,60)
+		-- 	shared.clients.ClientUsers[v.Name] = "VAPE USER"
+		-- 	break
+		-- end
+		local root = v.Character:WaitForChild("HumanoidRootPart")
+		if old then
+			local pos = root.Position
+			local x,y,z = (pos.X < 0 and -pos.X or pos.X),(pos.Y < 0 and -pos.Y or pos.Y),(pos.Z < 0 and -pos.Z or pos.Z)
+			local ox,oy,oz = (old.X < 0 and -old.X or old.X),(old.Y < 0 and -old.Y or old.Y),(old.Z < 0 and -old.Z or old.Z)
+			local hecker
+			if ox + (v.Character.Humanoid.WalkSpeed * 0.8) < x then
+				hecker = true
+				-- elseif oy + (v.Character.Humanoid.WalkSpeed * 0.625) < y then
+				-- 	hecker = true
+			elseif oz + (v.Character.Humanoid.WalkSpeed * 0.8) < z then
+				hecker = true
+			end
+			if hecker and not detected[v.Name] and v ~= game.Players.LocalPlayer
+				and bedwarsStore.matchState ~= 0 and not bedwarsStore.secs and not telepearlon
+				and not hps_detected[v.Name]  then
+				detected[v.Name] = true;
+				task.wait(0.1)
+				--if telepearlon then continue end
+				if telepearlon or not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer:FindFirstChild("HumanoidRootPart")) then
+				else
+					warningNotification("Vape", v.Name.." is using vape!",60)
+					shared.clients.ClientUsers[v.Name] = "VAPE USER"
+					break
+				end
+			end
+			if InfFlyD.Enabled and y > 2000 then
+				warningNotification("Vape", v.Name.." is using vape!",60)
+				shared.clients.ClientUsers[v.Name] = "VAPE USER"
+				break
+			end 
+			if v == game.Players.LocalPlayer then break end
+		end
+		old = root.Position
+	end
+end
+Detection = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+	Name = "HackerDetector",
+	Function = function (enabled)
+		if enabled then
+			task.spawn(function()
+				for i,v in pairs(plrs) do
+					task.spawn(function ()
+						char(v)
+					end)
+					task.spawn(function ()
+						v.CharacterAdded:Connect(function ()
+							task.wait(5)
+							char(v)
+						end)
+					end)
+				end
+				game.Players.PlayerAdded:Connect(function(v)
+					task.wait(5)
+					char(v)
+				end)
+			end)
+		end
+	end,
+})
+InfFlyD = Detection.CreateToggle({
+	Name = "Infinite Fly Check",
+	Function = function() end,
+})
 
 runFunction(function()
-    disabler = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-        Name = "ScytheDisabler",
+    local ScytheDisablerv2 = {Enabled = false}
+    ScytheDisablerv2 = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+        Name = "Scythe Disablerv2",
         Function = function(callback)
             if callback then
-                local ReplicatedStorage = game:GetService("ReplicatedStorage")
-                local Players = game:GetService("Players")
-                local RunService = game:GetService("RunService")
-                local ScytheDash = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules")["@rbxts"].net.out._NetManaged.ScytheDash
+                local runService = game:GetService('RunService')
+                local interval = 1 / 200
                 
-                local function onRenderStepped()
-                    local localPlayer = Players.LocalPlayer
-                    if not localPlayer then
-                        return
-                    end
-                    local character = localPlayer.Character
-                    if not character then
-                        return
-                    end
-                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-                    if humanoidRootPart then
-                        local lookVector = humanoidRootPart.CFrame.LookVector
-                        ScytheDash:FireServer({
-                            direction = lookVector
-                        })
-                    end
-                end
+                local lastTime = 0
+                local enabled = true
                 
-                local lastHeartbeat = tick()
-                local function onHeartbeat()
+                local function RepeatAction()
                     local currentTime = tick()
-                    local elapsedSeconds = currentTime - lastHeartbeat
-                    if elapsedSeconds > 0 then
-                        lastHeartbeat = currentTime
+                    if currentTime - lastTime >= interval and enabled then
+                        lastTime = currentTime
+                    
+                        local args = {
+                            [1] = {
+                                ["direction"] = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
+                            }
+                        }
+                        
+                        game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged.ScytheDash:FireServer(unpack(args))
                     end
                 end
                 
-                RunService.RenderStepped:Connect(onRenderStepped)
-                RunService.Heartbeat:Connect(onHeartbeat)                                                                                 
+                runService.Heartbeat:Connect(RepeatAction)
             end
-        end  
+        end,
+        Hovertext = "Scythe Disabler max speed 60 do not spam or break"
     })
 end)
 
@@ -5376,6 +5509,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/If
 		Function = function() end
 	})
 end)
+
 
 
 
