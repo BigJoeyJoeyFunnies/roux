@@ -55,6 +55,6 @@ PurpulText_2.BorderSizePixel = 0
 PurpulText_2.Position = UDim2.new(0.191553205, 0, -0.36605835, 0)
 PurpulText_2.Size = UDim2.new(0, 85, 0, 36)
 PurpulText_2.Font = Enum.Font.SourceSansBold
-PurpulText_2.Text = "v0.3"
+PurpulText_2.Text = "v0.4"
 PurpulText_2.TextColor3 = Color3.new(0.639216, 0.14902, 0.639216)
 PurpulText_2.TextSize = 24
