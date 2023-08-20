@@ -5771,6 +5771,26 @@ end)
 
 
 
+runFunction(function()
+	local FPSunlocker = {Enabled = false}
+	FPSunlocker = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "FPS unlocker",
+		Function = function(callback)
+			if callback then
+
+	
+setfpscap(999)
+
+
+			end
+		end, 
+		HoverText = "ez"
+	})
+end)
+
+
+
+
 
 
 
