@@ -399,7 +399,7 @@ local function getSpeed()
 			speed = speed + 90
 		end
 	        if bedwarsStore.scythe > tick() then 
-			speed = speed + 25
+			speed = speed + 23.3
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then 
 			speed = speed + 20
@@ -5643,11 +5643,11 @@ runFunction(function()
             
             local playerName = nearestPlayer.Name -- Get the name of the player to be teleported to
 
-            warningNotification("Star", "Teleporting to " .. playerName, 0) -- Display the initial notification with the player's name
+            warningNotification("Purpul", "Teleporting to " .. playerName, 15) -- Display the initial notification with the player's name
 
             local teleportSuccess = false -- Variable to track teleport success
 
-local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.7), {CFrame = CFrame.new(blockPosition)})
+local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.6), {CFrame = CFrame.new(blockPosition)})
             tween:Play()
             tween.Completed:Connect(function()
                 -- Teleportation completed, set teleportSuccess to true
@@ -5656,7 +5656,7 @@ local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new
 
             wait(7) -- Wait for 7 seconds to check if the teleportation failed
             if not teleportSuccess and isPlayerAlive(nearestPlayer) then
-                warningNotification("Star", "Teleport failed", 5) -- Display "Teleport failed" warning if the teleportation failed
+                warningNotification("Purpul", "Teleport failed", 50) -- Display "Teleport failed" warning if the teleportation failed
             end
         end
     end
@@ -5765,26 +5765,6 @@ debug.setconstant(require(lplr.PlayerScripts.TS.controllers.global.hotbar.ui.hea
 			end
 		end, 
 		HoverText = "cool"
-	})
-end)
-
-
-
-
-runFunction(function()
-	local FPSunlocker = {Enabled = false}
-	FPSunlocker = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "FPS unlocker",
-		Function = function(callback)
-			if callback then
-
-	
-setfpscap(999)
-
-
-			end
-		end, 
-		HoverText = "ez"
 	})
 end)
 
