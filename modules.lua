@@ -399,7 +399,7 @@ local function getSpeed()
 			speed = speed + 90
 		end
 	        if bedwarsStore.scythe > tick() then 
-			speed = speed + 23.3
+			speed = speed + 20.3 
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then 
 			speed = speed + 20
@@ -5497,6 +5497,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/ro
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/Ifelllikethispackexist/main/YEahPackt"))()
 
+                                               elseif Packmode.Value == "WasGonnaBeAPrivateButIdk" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/new/fr.lua"))()
+
 				end
 		
 			end
@@ -5505,7 +5509,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/If
 	})
 	Packmode = Packs.CreateDropdown({
 		Name = "Mode",
-		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "Vanila+", "AnotherPurpulPack", "Gleem16x", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "32x", "FirstPack"},
+		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "Vanila+", "AnotherPurpulPack", "Gleem16x", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "WasGonnaBeAPrivateButIdk", "32x", "FirstPack"},
 		Function = function() end
 	})
 end)
