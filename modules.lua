@@ -1,5 +1,6 @@
 -- modules
 
+wait(0.5) -- so it dont break ig
 
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
@@ -5241,6 +5242,303 @@ end)
 
 
 
+
+local autobankballoon = false
+runFunction(function()
+	local FastFly = {Enabled = false}
+	local FastFlyMode = {Value = "CFrame"}
+	local FastFlyVerticalSpeed = {Value = 40}
+	local FastFlyVertical = {Enabled = true}
+	local FastFlyAutoPop = {Enabled = true}
+	local FastFlyAnyway = {Enabled = false}
+	local FastFlyAnywayProgressBar = {Enabled = false}
+	local FastFlyDamageAnimation = {Enabled = false}
+	local FastFlyTP = {Enabled = false}
+	local FlyAnywayProgressBarFrame
+	local olddeflate
+	local FastFlyUp = false
+	local FastFlyDown = false
+	local FastFlyCoroutine
+	local groundtime = tick()
+	local onground = false
+	local lastonground = false
+	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
+
+	local function inflateBalloon()
+		if not FastFly.Enabled then return end
+		if entityLibrary.isAlive and (lplr.Character:GetAttribute("InflatedBalloons") or 0) < 1 then
+			autobankballoon = true
+			if getItem("balloon") then
+				bedwars.BalloonController:inflateBalloon()
+				return true
+			end
+		end
+		return false
+	end
+
+	FastFly = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "FastFlyBoost (zephyr)",
+		Function = function(callback)
+			if callback then
+				olddeflate = bedwars.BalloonController.deflateBalloon
+				bedwars.BalloonController.deflateBalloon = function() end
+
+				table.insert(FastFly.Connections, inputService.InputBegan:Connect(function(input1)
+					if FastFlyVertical.Enabled and inputService:GetFocusedTextBox() == nil then
+						if input1.KeyCode == Enum.KeyCode.Space or input1.KeyCode == Enum.KeyCode.ButtonA then
+							FastFlyUp = true
+						end
+						if input1.KeyCode == Enum.KeyCode.LeftShift or input1.KeyCode == Enum.KeyCode.ButtonL2 then
+							FastFlyDown = true
+						end
+					end
+				end))
+				table.insert(FastFly.Connections, inputService.InputEnded:Connect(function(input1)
+					if input1.KeyCode == Enum.KeyCode.Space or input1.KeyCode == Enum.KeyCode.ButtonA then
+						FastFlyUp = false
+					end
+					if input1.KeyCode == Enum.KeyCode.LeftShift or input1.KeyCode == Enum.KeyCode.ButtonL2 then
+						FastFlyDown = false
+					end
+				end))
+				if inputService.TouchEnabled then
+					pcall(function()
+						local jumpButton = lplr.PlayerGui.TouchGui.TouchControlFrame.JumpButton
+						table.insert(FastFly.Connections, jumpButton:GetPropertyChangedSignal("ImageRectOffset"):Connect(function()
+							FastFlyUp = jumpButton.ImageRectOffset.X == 146
+						end))
+						FastFlyUp = jumpButton.ImageRectOffset.X == 146
+					end)
+				end
+				table.insert(FastFly.Connections, vapeEvents.BalloonPopped.Event:Connect(function(poppedTable)
+					if poppedTable.inflatedBalloon and poppedTable.inflatedBalloon:GetAttribute("BalloonOwner") == lplr.UserId then 
+						lastonground = not onground
+						repeat task.wait() until (lplr.Character:GetAttribute("InflatedBalloons") or 0) <= 0 or not FastFly.Enabled
+						inflateBalloon() 
+					end
+			end))		
+                                        table.insert(FastFly.Connections, vapeEvents.AutoBankBalloon.Event:Connect(function()
+					repeat task.wait() until getItem("balloon")
+					inflateBalloon()
+				end))
+
+				local balloons
+				if entityLibrary.isAlive and (not bedwarsStore.queueType:find("mega")) then
+					balloons = inflateBalloon()
+				end
+				local megacheck = bedwarsStore.queueType:find("mega") or bedwarsStore.queueType == "winter_event"
+
+				task.spawn(function()
+					repeat task.wait() until bedwarsStore.queueType ~= "bedwars_test" or (not FastFly.Enabled)
+					if not FastFly.Enabled then return end
+					megacheck = bedwarsStore.queueType:find("mega") or bedwarsStore.queueType == "winter_event"
+				end)
+
+				local FastFlyAllowed = entityLibrary.isAlive and ((lplr.Character:GetAttribute("InflatedBalloons") and lplr.Character:GetAttribute("InflatedBalloons") > 0) or bedwarsStore.matchState == 2 or megacheck) and 1 or 0
+				if FastFlyAllowed <= 0 and shared.damageanim and (not balloons) then 
+					shared.damageanim()
+					bedwars.SoundManager:playSound(bedwars.SoundList["DAMAGE_"..math.random(1, 3)])
+				end
+
+				if FastFlyAnywayProgressBarFrame and FastFlyAllowed <= 0 and (not balloons) then 
+					FastFlyAnywayProgressBarFrame.Visible = true
+					FastFlyAnywayProgressBarFrame.Frame:TweenSize(UDim2.new(1, 0, 0, 20), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0, true)
+				end
+
+				groundtime = tick() + (2.6 + (entityLibrary.groundTick - tick()))
+				FastFlyCoroutine = coroutine.create(function()
+					repeat
+						repeat task.wait() until (groundtime - tick()) < 0.6 and not onground
+						FastFlyAllowed = ((lplr.Character and lplr.Character:GetAttribute("InflatedBalloons") and lplr.Character:GetAttribute("InflatedBalloons") > 0) or bedwarsStore.matchState == 2 or megacheck) and 1 or 0
+						if (not FastFly.Enabled) then break end
+						local FastFlytppos = -99999
+						if FastFlyAllowed <= 0 and FastFlyTP.Enabled and entityLibrary.isAlive then 
+							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, Vector3.new(0, -1000, 0), bedwarsStore.blockRaycast)
+							if ray then 
+						    	FastFlytppos = entityLibrary.character.HumanoidRootPart.Position.Y
+								local args = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
+								args[2] = ray.Position.Y + (entityLibrary.character.HumanoidRootPart.Size.Y / 2) + entityLibrary.character.Humanoid.HipHeight
+								entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(args))
+								task.wait(0.12)
+								if (not FastFly.Enabled) then break end
+								FastFlyAllowed = ((lplr.Character and lplr.Character:GetAttribute("InflatedBalloons") and lplr.Character:GetAttribute("InflatedBalloons") > 0) or bedwarsStore.matchState == 2 or megacheck) and 1 or 0
+								if flyAllowed <= 0 and FastFlytppos ~= -99999 and entityLibrary.isAlive then 
+									local args = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
+									args[2] = FastFlytppos
+									entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(args))
+								end
+							end
+						end
+					until (not FastFly.Enabled)
+				end)
+				coroutine.resume(FastFlyCoroutine)
+
+				RunLoops:BindToHeartbeat("FastFly", function(delta) 
+					if GuiLibrary.ObjectsThatCanBeSaved["Lobby CheckToggle"].Api.Enabled then 
+						if bedwars.matchState == 0 then return end
+					end
+					if entityLibrary.isAlive then
+						local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
+						FastFlyAllowed = ((lplr.Character:GetAttribute("InflatedBalloons") and lplr.Character:GetAttribute("InflatedBalloons") > 0) or bedwarsStore.matchState == 2 or megacheck) and 1 or 0
+						playerMass = playerMass + (FastFlyAllowed > 0 and 4 or 0) * (tick() % 0.4 < 0.2 and -1 or 1)
+
+						if FastFlyAnywayProgressBarFrame then
+							FastFlyAnywayProgressBarFrame.Visible = FastFlyAllowed <= 0
+							FastFlyAnywayProgressBarFrame.BackgroundColor3 = Color3.fromHSV(GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Hue, GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Sat, GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Value)
+							FastFlyAnywayProgressBarFrame.Frame.BackgroundColor3 = Color3.fromHSV(GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Hue, GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Sat, GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api.Value)
+						end
+
+						if FastFlyAllowed <= 0 then 
+							local newray = getPlacedBlock(entityLibrary.character.HumanoidRootPart.Position + Vector3.new(0, (entityLibrary.character.Humanoid.HipHeight * -2) - 1, 0))
+							onground = newray and true or false
+							if lastonground ~= onground then 
+								if (not onground) then 
+									groundtime = tick() + (2.6 + (entityLibrary.groundTick - tick()))
+									if FastFlyAnywayProgressBarFrame then 
+										FastFlyAnywayProgressBarFrame.Frame:TweenSize(UDim2.new(0, 0, 0, 20), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, groundtime - tick(), true)
+									end
+								else
+									if FastFlyAnywayProgressBarFrame then 
+										FastFlyAnywayProgressBarFrame.Frame:TweenSize(UDim2.new(1, 0, 0, 20), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0, true)
+									end
+								end
+							end
+							if FastFlyAnywayProgressBarFrame then 
+								FastFlyAnywayProgressBarFrame.TextLabel.Text = math.max(onground and 0.5 or math.floor((groundtime - tick()) * 10) / 10, 0).."s"
+							end
+							lastonground = onground
+						else
+							onground = true
+							lastonground = true
+						end
+
+						local FastFlyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FastFlyMode.Value == "Normal" and FastFlySpeed.Value or 20)
+						entityLibrary.character.HumanoidRootPart.Velocity = FastFlyVelocity + (Vector3.new(0, playerMass + (FastFlyUp and FastFlyVerticalSpeed.Value or 0) + (FastFlyDown and -FastFlyVerticalSpeed.Value or 0), 0))
+						if FastFlyMode.Value ~= "Normal" then
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((FastFlySpeed.Value + getSpeed()) - 20)) * delta
+						end
+					end
+				end)
+
+
+wait(0.5)
+           FastFly.ToggleButton(false)
+
+
+
+			else
+				pcall(function() coroutine.close(FastFlyCoroutine) end)
+				autobankballoon = false
+				waitingforballoon = false
+				lastonground = nil
+				FastFlyUp = false
+				FastFlyDown = false
+				RunLoops:UnbindFromHeartbeat("FastFly")
+				if FastFlyAnywayProgressBarFrame then 
+					FastFlyAnywayProgressBarFrame.Visible = false
+				end
+				if FastFlyAutoPop.Enabled then
+					if entityLibrary.isAlive and lplr.Character:GetAttribute("InflatedBalloons") then
+						for i = 1, lplr.Character:GetAttribute("InflatedBalloons") do
+							olddeflate()
+						end
+					end
+				end
+				bedwars.BalloonController.deflateBalloon = olddeflate
+				olddeflate = nil
+			end
+		end,
+		HoverText = "Fast fly (really ment for zephyr and/or scythe disabler)",
+		ExtraText = function() 
+			return "Heatseeker"
+		end
+	})
+	FastFlySpeed = FastFly.CreateSlider({
+		Name = "Speed",
+		Min = 30,
+		Max = 40,
+		Function = function(val) end, 
+		Default = 40
+	})
+	FastFlyVerticalSpeed = FastFly.CreateSlider({
+		Name = "Vertical Speed",
+		Min = 1,
+		Max = 100,
+		Function = function(val) end, 
+		Default = 44
+	})
+	FastFlyVertical = FastFly.CreateToggle({
+		Name = "Y Level",
+		Function = function() end, 
+		Default = true
+	})
+	local oldcamupdate
+	local camcontrol
+	local FastFlydamagecamera = {Enabled = false}
+	FastFlyDamageAnimation = FastFly.CreateToggle({
+		Name = "Damage Animation",
+		Function = function(callback) 
+			if FastFlydamagecamera.Object then 
+				FastFlydamagecamera.Object.Visible = callback
+			end
+			if callback then 
+				task.spawn(function()
+					repeat
+						task.wait(0.1)
+						for i,v in pairs(getconnections(gameCamera:GetPropertyChangedSignal("CameraType"))) do 
+							if v.Function then
+								camcontrol = debug.getupvalue(v.Function, 1)
+							end
+						end
+					until camcontrol
+					local caminput = require(lplr.PlayerScripts.PlayerModule.CameraModule.CameraInput)
+					local num = Instance.new("IntValue")
+					local numanim
+					shared.damageanim = function()
+						if numanim then numanim:Cancel() end
+						if FastFlydamagecamera.Enabled then
+							num.Value = 1000
+							numanim = tweenService:Create(num, TweenInfo.new(0.5), {Value = 0})
+							numanim:Play()
+						end
+					end
+					oldcamupdate = camcontrol.Update
+					camcontrol.Update = function(self, dt) 
+						if camcontrol.activeCameraController then
+							camcontrol.activeCameraController:UpdateMouseBehavior()
+							local newCameraCFrame, newCameraFocus = camcontrol.activeCameraController:Update(dt)
+							gameCamera.CFrame = newCameraCFrame * CFrame.Angles(0, 0, math.rad(num.Value / 100))
+							gameCamera.Focus = newCameraFocus
+							if camcontrol.activeTransparencyController then
+								camcontrol.activeTransparencyController:Update(dt)
+							end
+							if caminput.getInputEnabled() then
+								caminput.resetInputForFrameEnd()
+							end
+						end
+					end
+				end)
+			else
+				shared.damageanim = nil
+				if camcontrol then 
+					camcontrol.Update = oldcamupdate
+				end
+			end
+		end
+	})
+	FastFlydamagecamera = FastFly.CreateToggle({
+		Name = "Camera Animation",
+		Function = function() end,
+		Default = true
+	})
+	FastFlyTP = FastFly.CreateToggle({
+		Name = "TP Down",
+		Function = function() end,
+		Default = true
+	})
+end)
+
+
 local GuiLibrary = shared.GuiLibrary
 local plrs = game.Players:GetPlayers()
 local hps_detected = {}
@@ -5382,6 +5680,95 @@ InfFlyD = Detection.CreateToggle({
 	Name = "Infinite Fly Check",
 	Function = function() end,
 })
+
+runFunction(function()
+    local TPHighJump = {Enabled = false}
+
+    local function PerformHighJump()
+        local character = game.Players.LocalPlayer.Character
+        local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+        
+        if humanoidRootPart then
+            local jumpDistance = TPHighJumpDistance.Value
+            local initialHeight = humanoidRootPart.Position.Y
+            for i = 1, 3 do  
+                humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + Vector3.new(0, jumpDistance, 0))
+                wait(0.1) 
+                
+                local currentHeight = humanoidRootPart.Position.Y - initialHeight
+                warningNotification("Purpul", "Currently " .. tostring(currentHeight) .. " studs in the air", 3)
+            end
+        end
+    end
+
+    TPHighJump = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+        Name = "TPHighJump",
+        Function = function(callback)
+            if callback then
+                PerformHighJump()
+
+          wait(0.6)
+           TPHighJump.ToggleButton(false)
+
+            end
+        end,
+        HoverText = "x3 the number that you put in height"
+    })
+
+    TPHighJumpDistance = TPHighJump.CreateSlider({
+        Name = "Jump Height (studs)",
+        Min = 1,
+        Max = 350,
+        Default = 50,
+        Function = function(value)
+            TPHighJumpDistance.Value = value
+        end
+    })
+end)
+
+
+
+
+runFunction(function()
+    local StudTPBoost = {Enabled = false}
+    StudTPBoost = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+        Name = "StudTPBoost",
+        Function = function(callback)
+            if callback then
+                local character = game.Players.LocalPlayer.Character
+                local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    local forwardVector = humanoidRootPart.CFrame.LookVector
+                    local teleportVector = forwardVector * TPTeleportLength.Value
+                    humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + teleportVector + Vector3.new(0, TPTeleportHeight.Value, 0))
+                end
+           StudTPBoost.ToggleButton(false)
+            end
+        end,
+        HoverText = "a little flaggy but idk"
+    })
+
+    TPTeleportHeight = StudTPBoost.CreateSlider({
+        Name = "Height",
+        Min = 0,
+        Max = 50,
+        Default = 1,
+        Function = function(value)
+            TPTeleportHeight.Value = value
+        end
+    })
+
+    TPTeleportLength = StudTPBoost.CreateSlider({
+        Name = "Forward",
+        Min = 0,
+        Max = 50,
+        Default = 1,
+        Function = function(value)
+            TPTeleportLength.Value = value
+        end
+    })
+end)
+
 
 runFunction(function()
     local ScytheDisablerv2 = {Enabled = false}
@@ -5751,6 +6138,63 @@ end)
 
 
 
+runFunction(function()
+	local Invis = {Enabled = false}
+	Invis = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "Invis Exploit",
+		Function = function(callback)
+			if callback then
+
+
+local LocalPlayer = game:GetService("Players").LocalPlayer
+
+function IsAlive(Player)
+    Player = Player or LocalPlayer
+    if not Player.Character then return false end
+    if not Player.Character:FindFirstChild("Head") then return false end
+    if not Player.Character:FindFirstChild("Humanoid") then return false end
+    if Player.Character:FindFirstChild("Humanoid").Health < 0.11 then return false end
+    return true
+end
+
+local function SetCollisions(Value)
+    for i, v in pairs(LocalPlayer:GetDescendants()) do
+        if v:IsA("BasePart") and v ~= LocalPlayer.Character.PrimaryPart and v.CanCollide then
+            if Value == true then
+                v.CanCollide = false
+            end
+
+            if Value == false then
+                v.CanCollide = true
+            end
+        end
+    end
+end
+
+task.spawn(function()
+    if IsAlive(LocalPlayer) then 
+        local Animation = Instance.new("Animation")
+        local Id = 11335949902
+        Animation.AnimationId = "rbxassetid://".. Id
+
+        local PlayerAnimation = LocalPlayer.Character.Humanoid.Animator:LoadAnimation(Animation)
+        if PlayerAnimation then
+            LocalPlayer.Character.Humanoid.CameraOffset = Vector3.new(0, 3 / -2, 0)
+            LocalPlayer.Character.HumanoidRootPart.Size = Vector3.new(2, 3, 1.1)
+
+            PlayerAnimation.Priority = Enum.AnimationPriority.Action4
+            PlayerAnimation.Looped = true
+            PlayerAnimation:Play()
+            PlayerAnimation:AdjustSpeed(0 / 10)
+            SetCollisions(true)
+        end
+    end
+end)
+			end
+		end, 
+		HoverText = "cant turn off idfc"
+	})
+end)
 
 
 
@@ -6689,7 +7133,7 @@ runFunction(function()
 		end)
 		uilistlayout.Parent = frame
 		local uicorner = Instance.new("UICorner")
-		uicorner.CornerRadius = UDim.new(0, 4)
+		uicorner.CornerRadius = UDim.new(0, 3000)
 		uicorner.Parent = frame
 		refreshAdornee(billboard)
 	end
@@ -6795,7 +7239,7 @@ runFunction(function()
 			end)
 			uilistlayout.Parent = frame
 			local uicorner = Instance.new("UICorner")
-			uicorner.CornerRadius = UDim.new(0, 4)
+			uicorner.CornerRadius = UDim.new(0, 3000)
 			uicorner.Parent = frame
 			local chest = v:WaitForChild("ChestFolderValue").Value
 			if chest then 
@@ -11429,10 +11873,10 @@ runFunction(function()
 		return oldguiupdate(h, s, v, ...)
 	end
 	local framecorner1 = Instance.new("UICorner")
-	framecorner1.CornerRadius = UDim.new(0, 5)
+	framecorner1.CornerRadius = UDim.new(0, 25)
 	framecorner1.Parent = overlayframe
 	local framecorner2 = Instance.new("UICorner")
-	framecorner2.CornerRadius = UDim.new(0, 5)
+	framecorner2.CornerRadius = UDim.new(0, 25)
 	framecorner2.Parent = overlayframe2
 	local label = Instance.new("TextLabel")
 	label.Size = UDim2.new(1, -7, 1, -5)
