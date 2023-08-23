@@ -5277,7 +5277,7 @@ runFunction(function()
 	end
 
 	FastFly = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "FastFlyBoost (zephyr)",
+		Name = "FastFlyBoost (zephyr/scythe)",
 		Function = function(callback)
 			if callback then
 				olddeflate = bedwars.BalloonController.deflateBalloon
