@@ -5931,6 +5931,11 @@ runFunction(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/RobloxBedwarsTexturePack/main/Novolinee.lua"))()
 
 
+                                               elseif Packmode.Value == "ScythePack" then 
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/Novoline/main/e"))()
+
+
 						elseif Packmode.Value == "Anime 16x" then 
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/16x.lua"))()
@@ -6002,6 +6007,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/If
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/roux/main/new/fr.lua"))()
 
+
+
 				end
 		
 			end
@@ -6011,7 +6018,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/BigJoeyJoeyFunnies/ro
 	})
 	Packmode = Packs.CreateDropdown({
 		Name = "Mode",
-		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "Vanila+", "AnotherPurpulPack", "Gleem16x", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "WasGonnaBeAPrivateButIdk", "32x", "FirstPack"},
+		List = {"Novoline","NovolinePink", "Anime 16x", "Barbie", "Vanila+", "AnotherPurpulPack", "Gleem16x", "64x", "Purp", "PurpV2", "Mc long", "MC long (purp edit)", "256x", "PP", "WasGonnaBeAPrivateButIdk", "ScythePack", "32x", "FirstPack"},
 		Function = function() end
 	})
 end)
@@ -6273,21 +6280,46 @@ game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14390857794"
 game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14390867940"
 
 
-						elseif CustomSkysMode.Value == "soon" then 
+						elseif CustomSkysMode.Value == "0Prime" then 
 
-					                loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/segggy/main/legend.lua", true))()
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14330565986"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14330586340"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14330572603"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14330578858"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14330569172"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14330582541"
 
 
+						elseif CustomSkysMode.Value == "S8" then 
+
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14367858882"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14367870281"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14367877336"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14367879776"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14367883477"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14367886375"
+
+
+						elseif CustomSkysMode.Value == "PurpleNight" then 
+
+
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14628621894"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14628637018"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14628627516"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14628631949"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14628625061"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14628635086"
 
 				end
 		
 			end
 		end,
 		HoverText = "makes game look better"
+          
 	})
 	CustomSkysMode = CustomSkys.CreateDropdown({
 		Name = "Mode",
-		List = {"Anya", "soon"},
+		List = {"Anya", "S8", "PurpleNight", "0Prime"},
 		Function = function() end
 	})
 end)
