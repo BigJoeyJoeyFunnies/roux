@@ -1,6 +1,6 @@
 -- modules
 
-wait(1) -- so it dont break ig
+wait(2) -- so it dont break ig
 
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
@@ -5245,6 +5245,24 @@ end)
 
 
 
+runFunction(function()
+	local ScytheLongJump = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		["Name"] = "ScytheLongJump (nebula e-sex)",
+		["Function"] = function(callback)
+			if callback then
+				game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1), {Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 80}):Play()
+	
+			warningNotification("ScytheLongJump", "Jump in 1s to not flag")
+wait(2.1)
+ScytheLongJump.ToggleButton(false)
+
+			end
+		end
+	})
+end)
+
+
+
 
 local autobankballoon = false
 runFunction(function()
@@ -5569,7 +5587,7 @@ end)
 
 runFunction(function()
     local ScytheDisablerv2 = {Enabled = false}
-    ScytheDisablerv2 = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+    ScytheDisablerv2 = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
         Name = "Scythe Disablerv2",
         Function = function(callback)
             if callback then
@@ -5601,9 +5619,44 @@ runFunction(function()
     })
 end)
 
+runFunction(function()
+    local HannaExploit1 = {Enabled = false}
+    HannaExploit1 = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
+        Name = "HannaExploit (disable after)",
+        Function = function(callback)
+            if callback then
+
+wait(1)
+HannaExploit1.ToggleButton(false)
+
+local LocalPlayer = game.Players.LocalPlayer
+
+while task.wait() do
+    for i, v in pairs(game.Players:GetChildren()) do
+        if v:IsA("Player") and v.Character then
+            local Args = {
+                [1] = {
+                    ["user"] = LocalPlayer,
+                    ["victimEntity"] = v.Character
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(Args))
+        end
+    end
+end
+
+
+
+            end
+        end,
+        Hovertext = "disable after match"
+    })
+end)
+
  runFunction(function()
   local ScytheDisabler = {Enabled = false}
-ScytheDisabler = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+ScytheDisabler = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
  Name = "Scythe Disabler",
         Function = function(callback)
             if callback then
@@ -5627,7 +5680,7 @@ end)
 
 
 runFunction(function()
-	local disabler = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+	local disabler = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
 		Name = "ScytheDisablerv4",
 		HoverText = "Makes speed check have no braincells",
 		Function = function(callback)
@@ -5652,7 +5705,7 @@ end)
 
 runFunction(function()
     local ScytheDisabler = {Enabled = false}
-    ScytheDisabler = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+    ScytheDisabler = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
         Name = "Scythe Disablerv3",
         Function = function(callback)
             if callback then
@@ -5685,6 +5738,107 @@ runFunction(function()
         end
     })
 end)
+
+
+runFunction(function()
+	local AnimationPlayer = {Enabled = false}
+	local AnimationPlayerBox = {Value = "11335949902"}
+	local AnimationPlayerSpeed = {Speed = 1}
+	local playedanim
+	AnimationPlayer = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
+		Name = "INVISIBLE (VAPE METHOD, THANKS TOP)",
+		Function = function(callback)
+			if callback then 
+
+
+				if entityLibrary.isAlive then 
+					if playedanim then 
+						playedanim:Stop() 
+						playedanim.Animation:Destroy()
+						playedanim = nil 
+					end
+					local anim = Instance.new("Animation")
+					local suc, id = pcall(function() return string.match(game:GetObjects("rbxassetid://"..AnimationPlayerBox.Value)[1].AnimationId, "%?id=(%d+)") end)
+                    if not suc then
+                        id = AnimationPlayerBox.Value
+                    end
+                    anim.AnimationId = "rbxassetid://"..id
+					local suc, res = pcall(function() playedanim = entityLibrary.character.Humanoid.Animator:LoadAnimation(anim) end)
+					if suc then
+						playedanim.Priority = Enum.AnimationPriority.Action4
+						playedanim.Looped = true
+						playedanim:Play()
+						playedanim:AdjustSpeed(AnimationPlayerSpeed.Value / 10)
+						table.insert(AnimationPlayer.Connections, playedanim.Stopped:Connect(function()
+							if AnimationPlayer.Enabled then
+								AnimationPlayer.ToggleButton(false)
+								AnimationPlayer.ToggleButton(false)
+							end
+						end))
+					else
+						warningNotification("AnimationPlayer", "failed to load anim : "..(res or "invalid animation id"), 5)
+					end
+				end
+				table.insert(AnimationPlayer.Connections, lplr.CharacterAdded:Connect(function()
+					repeat task.wait() until entityLibrary.isAlive or not AnimationPlayer.Enabled
+					task.wait(0.5)
+					if not AnimationPlayer.Enabled then return end
+					if playedanim then 
+						playedanim:Stop() 
+						playedanim.Animation:Destroy()
+						playedanim = nil 
+					end
+					local anim = Instance.new("Animation")
+					local suc, id = pcall(function() return string.match(game:GetObjects("rbxassetid://"..AnimationPlayerBox.Value)[1].AnimationId, "%?id=(%d+)") end)
+                    if not suc then
+                        id = AnimationPlayerBox.Value
+                    end
+                    anim.AnimationId = "rbxassetid://"..id
+					local suc, res = pcall(function() playedanim = entityLibrary.character.Humanoid.Animator:LoadAnimation(anim) end)
+					if suc then
+						playedanim.Priority = Enum.AnimationPriority.Action4
+						playedanim.Looped = true
+						playedanim:Play()
+						playedanim:AdjustSpeed(AnimationPlayerSpeed.Value / 10)
+						playedanim.Stopped:Connect(function()
+							if AnimationPlayer.Enabled then
+								AnimationPlayer.ToggleButton(false)
+								AnimationPlayer.ToggleButton(false)
+							end
+						end)
+					else
+						warningNotification("AnimationPlayer", "failed to load anim : "..(res or "invalid animation id"), 5)
+					end
+				end))
+			else
+				if playedanim then playedanim:Stop() playedanim = nil end
+			end
+		end
+	})
+	AnimationPlayerBox = AnimationPlayer.CreateTextBox({
+		Name = "Animation",
+		TempText = "DONT TUCH",
+		Function = function(enter) 
+			if enter and AnimationPlayer.Enabled then 
+				AnimationPlayer.ToggleButton(false)
+				AnimationPlayer.ToggleButton(false)
+			end
+		end
+	})
+	AnimationPlayerSpeed = AnimationPlayer.CreateSlider({
+		Name = "Speed",
+		Function = function(val)
+			if playedanim then 
+				playedanim:AdjustSpeed(val / 10)
+			end
+		end,
+		Min = 0.00000000000000001,
+		Max = 0.00000000000000002,
+		Double = 10
+	})
+end)
+
+
 
 local GuiLibrary = shared.GuiLibrary
 local plrs = game.Players:GetPlayers()
@@ -6290,6 +6444,15 @@ game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14330569172"
 game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14330582541"
 
 
+						elseif CustomSkysMode.Value == "Purpul0Prime" then 
+
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14661549277"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14661516001"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14661525597"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14661535704"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14661544451"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14661556631"
+
 						elseif CustomSkysMode.Value == "S8" then 
 
 game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14367858882"
@@ -6299,6 +6462,15 @@ game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14367879776"
 game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14367883477"
 game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14367886375"
 
+
+						elseif CustomSkysMode.Value == "HeroSky" then 
+
+game.Lighting.Sky.SkyboxBk = "http://www.roblox.com/asset/?id=14661650359"
+game.Lighting.Sky.SkyboxDn = "http://www.roblox.com/asset/?id=14661681448"
+game.Lighting.Sky.SkyboxFt = "http://www.roblox.com/asset/?id=14661661491"
+game.Lighting.Sky.SkyboxLf = "http://www.roblox.com/asset/?id=14661666837"
+game.Lighting.Sky.SkyboxRt = "http://www.roblox.com/asset/?id=14661656545"
+game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14661691684"
 
 						elseif CustomSkysMode.Value == "PurpleNight" then 
 
@@ -6319,7 +6491,7 @@ game.Lighting.Sky.SkyboxUp = "http://www.roblox.com/asset/?id=14628635086"
 	})
 	CustomSkysMode = CustomSkys.CreateDropdown({
 		Name = "Mode",
-		List = {"Anya", "S8", "PurpleNight", "0Prime"},
+		List = {"Anya", "S8", "PurpleNight", "HeroSky", "Purpul0Prime", "0Prime"},
 		Function = function() end
 	})
 end)
@@ -6436,6 +6608,27 @@ debug.setconstant(require(lplr.PlayerScripts.TS.controllers.global.hotbar.ui.hea
 			end
 		end, 
 		HoverText = "cool"
+	})
+end)
+
+
+
+
+
+runFunction(function()
+	local ScythePack = {Enabled = false}
+	ScythePack = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "ScythePack",
+		Function = function(callback)
+			if callback then
+
+	
+loadstring(game:HttpGet("https://raw.githubusercontent.com/StaryLOL/Novoline/main/e"))()
+
+
+			end
+		end, 
+		HoverText = "made it seperate bc yes"
 	})
 end)
 
