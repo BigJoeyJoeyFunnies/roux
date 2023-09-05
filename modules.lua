@@ -5245,21 +5245,6 @@ end)
 
 
 
-runFunction(function()
-	local ScytheLongJump = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		["Name"] = "ScytheLongJump (nebula e-sex)",
-		["Function"] = function(callback)
-			if callback then
-				game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1), {Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 80}):Play()
-	
-			warningNotification("ScytheLongJump", "Jump in 1s to not flag")
-wait(2.1)
-ScytheLongJump.ToggleButton(false)
-
-			end
-		end
-	})
-end)
 
 
 
@@ -6612,6 +6597,28 @@ debug.setconstant(require(lplr.PlayerScripts.TS.controllers.global.hotbar.ui.hea
 end)
 
 
+
+
+runFunction(function()
+	local ScytheLongJump = {Enabled = false}
+	ScytheLongJump = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
+		Name = "ScytheLongJump",
+		Function = function(callback)
+			if callback then
+
+wait(2.1)
+ScytheLongJump.ToggleButton(false)
+
+	
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1), {Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 80}):Play()
+	
+
+
+			end
+		end, 
+		HoverText = "cool"
+	})
+end)
 
 
 
