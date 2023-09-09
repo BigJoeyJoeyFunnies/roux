@@ -400,7 +400,7 @@ local function getSpeed()
 			speed = speed + 90
 		end
 	        if bedwarsStore.scythe > tick() then 
-			speed = speed + 15
+			speed = speed + 17.5
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then 
 			speed = speed + 20
@@ -5246,9 +5246,6 @@ end)
 
 
 
-
-
-
 local autobankballoon = false
 runFunction(function()
 	local FastFly = {Enabled = false}
@@ -5462,7 +5459,7 @@ wait(0.5)
 	FastFlySpeed = FastFly.CreateSlider({
 		Name = "Speed",
 		Min = 30,
-		Max = 40,
+		Max = 200,
 		Function = function(val) end, 
 		Default = 40
 	})
@@ -5545,6 +5542,7 @@ wait(0.5)
 end)
 
 
+
 runFunction(function()
     local infiniteJumpEnabled = false
     local infiniteJumpConnection = nil
@@ -5570,39 +5568,7 @@ runFunction(function()
     })
 end)
 
-runFunction(function()
-    local ScytheDisablerv2 = {Enabled = false}
-    ScytheDisablerv2 = GuiLibrary.ObjectsThatCanBeSaved.ExploitWindow.Api.CreateOptionsButton({
-        Name = "Scythe Disablerv2",
-        Function = function(callback)
-            if callback then
-                local runService = game:GetService('RunService')
-                local interval = 1 / 100
-                
-                local lastTime = 0
-                local enabled = true
-                
-                local function RepeatAction()
-                    local currentTime = tick()
-                    if currentTime - lastTime >= interval and enabled then
-                        lastTime = currentTime
-                    
-                        local args = {
-                            [1] = {
-                                ["direction"] = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
-                            }
-                        }
-                        
-                        game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged.ScytheDash:FireServer(unpack(args))
-                    end
-                end
-                
-                runService.Heartbeat:Connect(RepeatAction)
-            end
-        end,
-        Hovertext = "enable the other one too"
-    })
-end)
+
 
 runFunction(function()
     local HannaExploit1 = {Enabled = false}
@@ -6256,107 +6222,6 @@ runFunction(function()
 	})
 end)
 
-
-
-runFunction(function()
-    local hasTeleported = false
-    local TweenService = game:GetService("TweenService")
-    local lplr = game.Players.LocalPlayer
-
-    function findNearestPlayer()
-        local nearestPlayer = nil
-        local minDistance = math.huge
-        
-        for _, player in pairs(game.Players:GetPlayers()) do
-            if player ~= lplr and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Team ~= lplr.Team and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid.Health > 0 then
-                local distance = (player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                if distance < minDistance then
-                    nearestPlayer = player
-                    minDistance = distance
-                end
-            end
-        end
-        
-        return nearestPlayer
-    end
-
-    function findWeakestPlayer()
-        local weakestPlayer = nil
-        local minHealth = math.huge
-        
-        for _, player in pairs(game.Players:GetPlayers()) do
-            if player ~= lplr and player.Character and player.Character:FindFirstChild("Humanoid") then
-                local health = player.Character.Humanoid.Health
-                if health < minHealth then
-                    weakestPlayer = player
-                    minHealth = health
-                end
-            end
-        end
-        
-        return weakestPlayer
-    end
-
-    function teleportToPlayer(player)
-        local playerRootPart = player.Character.HumanoidRootPart
-        local blockPosition = Vector3.new(playerRootPart.Position.X, playerRootPart.Position.Y, playerRootPart.Position.Z)
-        
-        local playerName = player.Name
-        warningNotification("Star", "Teleporting to " .. playerName, 0)
-
-        local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(1.5), {CFrame = CFrame.new(blockPosition)})
-        tween:Play()
-    end
-
-    local tpToClosestEnabled = false
-    local tpToWeakestEnabled = false
-
-    BetterPlayerTP = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-        Name = "BetterPlayerTP",
-        Function = function(callback)
-            if callback then
-                lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
-                lplr.CharacterAdded:Connect(function()
-                    wait(0.3)
-                    if tpToClosestEnabled then
-                        local closestPlayer = findNearestPlayer()
-                        if closestPlayer then
-                            teleportToPlayer(closestPlayer)
-                        else
-                            warningNotification("Star", "Teleport failed", 5)
-                        end
-                    end
-                    if tpToWeakestEnabled then
-                        local weakestPlayer = findWeakestPlayer()
-                        if weakestPlayer then
-                            teleportToPlayer(weakestPlayer)
-                        else
-                            warningNotification("Star", "Teleport failed", 5)
-                        end
-                    end
-                end)
-                hasTeleported = false
-                BetterPlayerTP["ToggleButton"](false)
-            end
-        end,
-        ["HoverText"] = "Tp To Closest Player, Thanks Snoopy for method"
-    })
-    TPCLOSEST = BetterPlayerTP.CreateToggle({
-        Name = "TpToClosest",
-        Function = function()
-            tpToClosestEnabled = not tpToClosestEnabled
-        end,
-        Default = true
-    })
-    TPWEAKEST = BetterPlayerTP.CreateToggle({
-        Name = "TpToWeakest",
-        Function = function()
-            tpToWeakestEnabled = not tpToWeakestEnabled
-        end,
-        Default = false
-    })
-end)
-
 runFunction(function()
 	local Shaders = {Enabled = false}
 	local ShadersMode = {Value = "Normal"}
@@ -6399,7 +6264,6 @@ runFunction(function()
 		Function = function() end
 	})
 end)
-
 
 runFunction(function()
 	local CustomSkys = {Enabled = false}
@@ -6599,26 +6463,6 @@ end)
 
 
 
-runFunction(function()
-	local ScytheLongJump = {Enabled = false}
-	ScytheLongJump = GuiLibrary.ObjectsThatCanBeSaved.PurpulWindow.Api.CreateOptionsButton({
-		Name = "ScytheLongJump",
-		Function = function(callback)
-			if callback then
-
-wait(2.1)
-ScytheLongJump.ToggleButton(false)
-
-	
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1), {Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 80}):Play()
-	
-
-
-			end
-		end, 
-		HoverText = "cool"
-	})
-end)
 
 
 
